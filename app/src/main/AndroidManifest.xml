@@ -12,6 +12,8 @@
         <receiver android:name=".Calendar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+
+                <action android:name="com.pythong.GridView_ACTION" />
             </intent-filter>
 
             <meta-data

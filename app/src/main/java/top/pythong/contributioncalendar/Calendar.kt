@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.RemoteViews
+import android.widget.Toast
 
 
 /**
@@ -14,7 +15,8 @@ import android.widget.RemoteViews
  */
 class Calendar : AppWidgetProvider() {
     companion object {
-        val REFRESH_ACTION = "top.pythong.refresh_action"
+        val GridView_ACTION = "com.pythong.GridView_ACTION"
+        val POSITION = "POSITION"
     }
 
     override fun onUpdate(
@@ -25,24 +27,25 @@ class Calendar : AppWidgetProvider() {
         // 可能有多个小部件处于活动状态，因此请更新所有小部件
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
-//            GlobalScope.launch(Dispatchers.IO){
-//                Log.d("GridFactory","刷新数据")
-//                delay(10000)
-//                Log.d("GridFactory","刷新数据成功")
-//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.gridView)
-//            }
         }
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
         val action = intent!!.action
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        Log.d("GridFactory", "接收点击事件，位置：${intent!!.getStringExtra(REFRESH_ACTION)}")
-        if (action == REFRESH_ACTION) {
-            Log.d("GridFactory", "接收点击事件，位置：${intent!!.getStringExtra(REFRESH_ACTION)}")
-//            val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-//                    AppWidgetManager.INVALID_APPWIDGET_ID)
-//            updateAppWidget(context,appWidgetManager,appWidgetId)
+        if (action == GridView_ACTION) {
+            val position = intent.getIntExtra(POSITION,-1)
+            if (position>14&&position%14!=0) {
+                val dataCount = intent.getIntExtra("data-count", -1)
+                val date = intent.getStringExtra("date")
+                Toast.makeText(context, "$date COMMIT COUNT: $dataCount", Toast.LENGTH_LONG).show()
+            }else if (position==0){
+                val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID)
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.gridView)
+//                Toast.makeText(context, "刷新", Toast.LENGTH_SHORT).show()
+            }
         }
 
         super.onReceive(context, intent)
@@ -71,11 +74,11 @@ internal fun updateAppWidget(
     views.setRemoteAdapter(R.id.gridView, serviceIntent)
     Log.d("Calendar", "updateAPPWidget")
 
-    val gridIntent = Intent()
-    gridIntent.action = Calendar.REFRESH_ACTION
+    val gridIntent = Intent(context, Calendar::class.java)
+    gridIntent.action = Calendar.GridView_ACTION
     gridIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
     val pendingIntent =
-        PendingIntent.getBroadcast(context, 0, gridIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        PendingIntent.getBroadcast(context, appWidgetId, gridIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     // 设置intent模板
     // 设置intent模板
     views.setPendingIntentTemplate(R.id.gridView, pendingIntent)

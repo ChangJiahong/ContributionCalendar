@@ -37,6 +37,7 @@ class GridWidgetService : RemoteViewsService() {
         val weeks = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
 
         private var data: Array<Day> = Array(maxSize) { i ->
+            if (i==0) return@Array Day(i, "", 0,"refresh")
             if (i==1*maxLineSize||i==2*maxLineSize||i==3*maxLineSize||i==4*maxLineSize||i==5*maxLineSize||i==6*maxLineSize||i==7*maxLineSize){
                 // 初始化星期列
                 return@Array Day(
@@ -69,7 +70,7 @@ class GridWidgetService : RemoteViewsService() {
              * 裁剪数据
              */
             val maxRow = maxLineSize-1
-            var subInt = sheet.data.size - maxRow
+            val subInt = sheet.data.size - maxRow
             // 裁剪数据
             val dayData=sheet.data.subList(subInt,sheet.data.size)
             dayData.forEach {
@@ -143,8 +144,10 @@ class GridWidgetService : RemoteViewsService() {
 
             // 设置 第position位的“视图”对应的响应事件
             val fillInIntent = Intent()
-            fillInIntent.putExtra(Calendar.REFRESH_ACTION, position)
-            rv.setOnClickFillInIntent(R.id.itemImage, fillInIntent)
+            fillInIntent.putExtra(Calendar.POSITION, position)
+            fillInIntent.putExtra("date",day.date)
+            fillInIntent.putExtra("data-count",day.dataCount)
+            rv.setOnClickFillInIntent(R.id.itemLayout, fillInIntent)
 
             return rv
         }
@@ -156,6 +159,7 @@ class GridWidgetService : RemoteViewsService() {
             "L4" -> R.drawable.rect_l4
             "def" -> R.drawable.rect_def
             "null" -> R.drawable.rect_null
+            "refresh" -> R.drawable.github
             else -> -1
         }
 
