@@ -9,6 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ContributionCalendar">
+        <receiver android:name=".Calendar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/calendar_info" />
+        </receiver>
+        <service
+            android:name=".GridWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,13 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="io.flutter.embedding.android.FlutterActivity"
-            android:launchMode="singleTop"
+        <activity
+            android:name="io.flutter.embedding.android.FlutterActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize"
-            />
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
