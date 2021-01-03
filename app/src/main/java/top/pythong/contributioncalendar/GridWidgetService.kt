@@ -3,6 +3,7 @@ package top.pythong.contributioncalendar
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
@@ -64,7 +65,9 @@ class GridWidgetService : RemoteViewsService() {
         }
 
         private fun getSheetByGithub(): CalendarSheet {
-            val sheet = GithubClient.getSheetByGithub("https://github.com/ChangJiahong")
+            val sp = context.getSharedPreferences("FlutterSharedPreferences",Context.MODE_PRIVATE)
+            val username = sp.getString("flutter.username","ChangJiahong")
+            val sheet = GithubClient.getSheetByGithub("https://github.com/$username")
 
             /**
              * 裁剪数据

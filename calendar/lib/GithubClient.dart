@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:calendar/Calendar.dart';
+import 'package:calendar/HttpError.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart' as prefix;
 import 'package:html/parser.dart' show parse;
@@ -70,8 +71,12 @@ class GithubClient {
 
 
   static Future<CalendarSheet> getGithubCalendar(String url) async {
-
-    var res = await new Dio().get(url);
+    Response res ;
+    try {
+      res = await new Dio().get(url);
+    }catch(e){
+      throw HttpError();
+    }
     var html = res.data;
     // var list = XPath.source(html).query("//*[@id=\"js-pjax-container\"]/div[2]/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div[1]").list();
     var document = parse(html);
