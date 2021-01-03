@@ -204,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String getUsername() {
     String name = prefs.getString(USERNAME);
-    username =  name!=null&&name.isNotEmpty?name:"ChangJiahon";
+    username =  name!=null&&name.isNotEmpty?name:"ChangJiahong";
     return username;
   }
 }
