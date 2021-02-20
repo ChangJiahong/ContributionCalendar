@@ -39,6 +39,21 @@ class GithubClient {
     }
   }
 
+  static String parseDataLevel(String level){
+    switch(level){
+      case "0":
+        return "def";
+      case "1":
+        return "L1";
+      case "2":
+        return "L2";
+      case "3":
+        return "L3";
+      case "4":
+        return "L4";
+    }
+  }
+
   static String parseDate(String date, bool isEn){
     var mm = date.split("-")[1];
     switch(mm){
@@ -106,7 +121,10 @@ class GithubClient {
                 y: yIndex++,
                 date: day.attributes["data-date"],
                 dataCount: int.parse(day.attributes["data-count"]),
-                fill: parseFill(day.attributes["fill"]));
+                // fill: parseFill(day.attributes["fill"])
+                // github网站2021/2月份更新后，fill属性变成data-level属性
+              fill: parseDataLevel(day.attributes["data-level"])
+            );
             var date = parseDate(wd.date, true);
             if(date!=p){// 与当前列第一天不是同一月
               f=true;

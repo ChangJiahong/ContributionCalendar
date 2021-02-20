@@ -18,6 +18,16 @@ object GithubClient {
         else -> "null"
     }
 
+    fun parseDataLevel(level: String): String = when (level) {
+        "0" -> "def"
+        "1" -> "L1"
+        "2" -> "L2"
+        "3" -> "L3"
+        "4" -> "L4"
+        else -> "null"
+    }
+
+
     private fun parseDate(date: String, isEn: Boolean): String =
         when (date.split("-").toTypedArray()[1]) {
             "01" -> if (isEn) "Jan" else "一月"
@@ -35,7 +45,7 @@ object GithubClient {
             else -> " "
         }
 
-    fun getSheetByGithub(url:String): CalendarSheet {
+    fun getSheetByGithub(url: String): CalendarSheet {
 
         val doc = Jsoup.connect(url).get()
         val svgs = doc.getElementsByClass("js-calendar-graph-svg")[0].children()[0].children()
@@ -61,7 +71,8 @@ object GithubClient {
                             index = yIndex,
                             date = day.attr("data-date"),
                             dataCount = day.attr("data-count").toInt(),
-                            fill = parseFill(day.attr("fill"))
+//                            fill = parseFill(day.attr("fill"))
+                            fill = parseDataLevel(day.attr("data-level"))
                         )
                         val date = parseDate(wd.date, true)
                         if (date != p) {// 与当前列第一天不是同一月

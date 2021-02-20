@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static const String USERNAME = "username";
 
   SharedPreferences prefs ;
-  String username;
+  String username="ChangJiahong";
 
   CalendarSheet sheet = CalendarSheet(
       data: List.generate(

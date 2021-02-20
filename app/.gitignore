@@ -1,1 +1,5 @@
 /build
+/release/*
+/release/output-metadata.json
+/release/ContributionCalendar-v1.0.apk
+/release/ContributionCalendar-v1.1.apk
